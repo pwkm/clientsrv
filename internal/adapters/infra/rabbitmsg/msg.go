@@ -4,6 +4,7 @@ import (
 	"client/internal/core/domain"
 	"client/internal/utils/env"
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/google/uuid"
@@ -76,6 +77,7 @@ func (p *RabbitStream) SendMessage(client *domain.Client) error {
 	if err != nil {
 		log.Fatal("Sent message error: %w", err)
 	}
+	fmt.Println("Message send")
 
 	return err
 }

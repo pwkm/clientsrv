@@ -20,10 +20,13 @@ func main() {
 
 	// Setup a database
 	db := posgresdb.Database(env)
+	// Closing database connection
 	// defer db.  .Close()
 
+	// Database initialisation
 	db.AutoMigrate(&domain.Client{}, &domain.Login{}, &domain.Profile{})
-	// Setup Kakfa
+
+	// Setup RabbitMQ
 	str, err := rabbitmsg.NewRabbitStream(env)
 	if err != nil {
 		log.Fatal("Error initiating Rabbit: ", err)
@@ -38,7 +41,7 @@ func main() {
 
 	// setup different services
 	clientRepo := repository.NewClientRepository(db)
-	clientservice := service.NewClientService(clientRepo)
+	clientservice := service.NewClientService(clientRepo, str)
 	clientHandler := http.NewClientHandler(clientservice)
 
 	// productRepo := repository.NewProductRepository(db)

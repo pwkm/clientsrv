@@ -22,14 +22,14 @@ var (
 // Client Service Structure
 // -----------------------------
 type ClientService struct {
-	Repo ports.IClientRepository
-	// Stream ports.IMessageStream
+	Repo   ports.IClientRepository
+	Stream ports.IMessageStream
 }
 
-func NewClientService(repo ports.IClientRepository) *ClientService {
+func NewClientService(repo ports.IClientRepository, str ports.IMessageStream) *ClientService {
 	return &ClientService{
-		Repo: repo,
-		// Stream: str,
+		Repo:   repo,
+		Stream: str,
 	}
 }
 
@@ -47,21 +47,21 @@ func (c *ClientService) RegisterClient(
 	// Create an unique ID
 	id, err := uuid.NewV6()
 
-	// Create new login entry
+	// Create new login struct
 	login, err = domain.NewLogin(email, password, id)
 	if err != nil {
 		log.Printf("error creating login: %v", err)
 		return uuid.Nil, err_client_creation_error
 	}
 
-	// Create a first profile
+	// Create a first profile struct
 	profile, err = domain.NewProfile("", "", 0, "", email, time.Now())
 	if err != nil {
 		log.Printf("error creating profile: %v", err)
 		return uuid.Nil, err_client_creation_error
 	}
 
-	// Create a client
+	// Create a client struct
 	client, err := domain.NewClient(id, name, login, profile)
 	if err != nil {
 		log.Printf("error creating client: %v", err)
@@ -76,12 +76,12 @@ func (c *ClientService) RegisterClient(
 	}
 
 	// Stream client as a message
-	// err = c.Stream.
-	// 	SendMessage(client)
-	// if err != nil {
-	// 	log.Printf("client can not be streamed: %v", err)
-	// 	return uuid.Nil, err_client_creation_error
-	// }
+	err = c.Stream.
+		SendMessage(client)
+	if err != nil {
+		log.Printf("client can not be streamed: %v", err)
+		return uuid.Nil, err_client_creation_error
+	}
 
 	// Return the client ID
 	return client.ID, nil

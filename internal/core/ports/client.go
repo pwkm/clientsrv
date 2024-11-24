@@ -13,9 +13,9 @@ type IClientRepository interface {
 	// DeleteClient(id uuid.UUID) error
 }
 
-// type IMessageStream interface {
-// 	SendMessage(c *domain.Client) error
-// }
+type IMessageStream interface {
+	SendMessage(c *domain.Client) error
+}
 
 type IClientService interface {
 	RegisterClient(name, email, password string) (uuid.UUID, error)

@@ -37,22 +37,6 @@ func (cr *ClientRepository) SaveClient(client *domain.Client) error {
 		return result.Error
 	}
 
-	// // Save login
-	// insertStmt = `insert into login(id, login, password) values($1, $2, $3)`
-	// _, err = cr.db.Exec(insertStmt, client.ID, client.Login.Email, client.Login.Password)
-	// if err != nil {
-	// 	log.Printf("error saving login: %v", err)
-	// 	return err
-	// }
-
-	// // Save profile
-	// insertStmt = `insert into profile(id, street, number, postcode, community, email, birthday) values($1, $2, $3, $4, $5, $6, $7)`
-	// _, err = cr.db.Exec(insertStmt, client.ID, client.Profile.Street, client.Profile.Number, client.Profile.Postcode, client.Profile.Community, client.Profile.Email, client.Profile.Birthday)
-	// if err != nil {
-	// 	log.Printf("error saving profile: %v", err)
-	// 	return err
-	// }
-
 	// commit transactions
 	result = tx.Commit()
 	return result.Error
