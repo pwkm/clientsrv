@@ -1,6 +1,7 @@
 package http
 
 import (
+	"client/internal/adapters/infra/monitoring"
 	"client/internal/utils/env"
 	"crypto/rand"
 	"encoding/hex"
@@ -22,7 +23,11 @@ func NewRouter(env *env.Env, clienthandler ClientHandler) (*Router, error) {
 
 	router := gin.Default()
 
-	// Swagger
+	// midleware prometheus
+	router.Use(monitoring.PrometheusMiddleware())
+
+	// Register metrics
+	router.GET("/metrics", monitoring.PrometheusHandler())
 
 	// Client group
 	client := router.Group("/client")

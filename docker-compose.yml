@@ -1,0 +1,81 @@
+version: '3.8'
+#name: clientApp
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    # restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: azerty123
+      # POSTGRES_DB: exampledb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  message:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 15692:15692
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - my-network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+     - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - my-network
+
+  client:
+    build: .
+    container_name: client
+#    environment:
+#      DB_HOST: db           # Use the service name as the host
+#      DB_PORT: 5432
+#      DB_USER: postgres
+#      DB_PASSWORD: password
+#      DB_NAME: exampledb
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - message
+      - prometheus
+    networks:
+      - my-network
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    # restart: unless-stopped
+    ports:
+     - '3000:3000'
+    depends_on:
+      - prometheus
+    networks:
+      - my-network
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  pgdata:
+  grafana-storage: {}
+  rabbitmq_data:
+
+networks:
+  my-network:
+    driver: bridge
+  
