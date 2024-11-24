@@ -1,0 +1,40 @@
+http://localhost:8080/client/
+Authorization: Basic admin secret
+
+###
+POST http://localhost:8080/client/new HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Martine",
+    "email": "Martine.vv@hotmail.com",
+    "password": "Azerty123"
+}
+###
+
+POST http://localhost:8080/client/new HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Peter",
+    "email": "Pwkm@telenet.be",
+    "password": "Azerty123"
+}
+
+###
+http://localhost:8080/client/01ef9f5a-28be-6ee0-a879-b62758b2695c
+
+###
+
+http://localhost:8080/client/delete/01ef9f65-59c2-65ac-a6de-b62758b2695c
+
+###
+
+POST http://localhost:8080/product/new HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Verplichte verzekering - Basic",
+    "description": "Standaard verplichte verzekering voor standaard persoon",
+    "annualcontribution": 125
+}
