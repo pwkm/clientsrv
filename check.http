@@ -22,11 +22,11 @@ content-type: application/json
 }
 
 ###
-http://localhost:8080/client/01ef9f5a-28be-6ee0-a879-b62758b2695c
+http://localhost:8080/client/01efaaaa-584e-6a78-b009-f2790ce2618c
 
 ###
 
-http://localhost:8080/client/delete/01ef9f65-59c2-65ac-a6de-b62758b2695c
+DELETE http://localhost:8080/client/01ef9f65-59c2-65ac-a6de-b62758b2695c
 
 ###
 

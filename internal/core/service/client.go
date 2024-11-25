@@ -90,40 +90,40 @@ func (c *ClientService) RegisterClient(
 // -----------------------------
 // Function: Get Clients
 // -----------------------------
-// func (c *ClientService) GetClients() ([]*domain.Client, error) {
-// 	var clients []*domain.Client
+func (c *ClientService) GetClients() ([]*domain.Client, error) {
+	var clients []*domain.Client
 
-// 	clients, err := c.Repo.QueryClients()
-// 	if err != nil {
-// 		log.Printf("QueryClient adapter function generates an error: %v", err)
-// 		return nil, err_client_no_records
-// 	}
-// 	return clients, nil
-// }
+	clients, err := c.Repo.QueryClients()
+	if err != nil {
+		log.Printf("QueryClient adapter function generates an error: %v", err)
+		return nil, err_client_no_records
+	}
+	return clients, nil
+}
 
-// // -----------------------------
-// // Function: Get Client By ID
-// // -----------------------------
-// func (c *ClientService) GetClientByID(id uuid.UUID) (*domain.Client, error) {
-// 	var client *domain.Client
+// -----------------------------
+// Function: Get Client By ID
+// -----------------------------
+func (c *ClientService) GetClientByID(id uuid.UUID) (*domain.Client, error) {
+	var client *domain.Client
 
-// 	client, err := c.Repo.QueryClientByID(id)
-// 	if err != nil {
-// 		log.Printf("QueryClient adapter function generates an error: %v", err)
-// 		return nil, err_client_creation_error
-// 	}
-// 	return client, nil
-// }
+	client, err := c.Repo.QueryClientByID(id)
+	if err != nil {
+		log.Printf("QueryClient adapter function generates an error: %v", err)
+		return nil, err_client_creation_error
+	}
+	return client, nil
+}
 
-// // -----------------------------
-// // Function: Delete a Client
-// // -----------------------------
-// func (c *ClientService) DeleteClient(id uuid.UUID) error {
+// -----------------------------
+// Function: Delete a Client
+// -----------------------------
+func (c *ClientService) DeleteClient(id uuid.UUID) error {
 
-// 	err := c.Repo.DeleteClient(id)
-// 	if err != nil {
-// 		log.Printf("DeleteClient adapter function generates an error: %v", err)
-// 		return err_client_creation_error
-// 	}
-// 	return nil
-// }
+	err := c.Repo.DeleteClient(id)
+	if err != nil {
+		log.Printf("DeleteClient adapter function generates an error: %v", err)
+		return err_client_creation_error
+	}
+	return nil
+}

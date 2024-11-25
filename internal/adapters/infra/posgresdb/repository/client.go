@@ -2,9 +2,15 @@ package repository
 
 import (
 	"client/internal/core/domain"
+	"errors"
 	"log"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
+)
+
+var (
+	ERROR_NO_CLIENT_FOUND = errors.New("no rows were found")
 )
 
 // ------------------------------------
@@ -42,133 +48,55 @@ func (cr *ClientRepository) SaveClient(client *domain.Client) error {
 	return result.Error
 }
 
-// // ------------------------------------
-// // Func: Query Clients
-// // ------------------------------------
-// func (cr *ClientRepository) QueryClients() ([]*domain.Client, error) {
-// 	var clients []*domain.Client
-// 	var id uuid.UUID
-// 	var id2 uuid.UUID
-// 	var name string
+// ------------------------------------
+// Func: Query Clients
+// ------------------------------------
+func (cr *ClientRepository) QueryClients() ([]*domain.Client, error) {
+	var clients []*domain.Client
 
-// 	// Query all clients
-// 	querystm1 := `SELECT id, name FROM client`
-// 	result, err := cr.db.Query(querystm1)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer result.Close()
+	// Query all clients
+	result := cr.db.Preload("Profile").Preload("Login").Find(&clients)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, ERROR_NO_CLIENT_FOUND
+	}
 
-// 	for result.Next() {
-// 		// Query client
-// 		err = result.Scan(&id, &name)
-// 		if err != nil {
-// 			return nil, err
-// 		}
+	return clients, nil
+}
 
-// 		// Query login
-// 		var login = new(domain.Login)
-// 		querystm2 := `SELECT id, login, password FROM login WHERE id=$1;`
-// 		row2 := cr.db.QueryRow(querystm2, id)
-// 		err := row2.Scan(&id2, &login.Email, &login.Password)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		if err == sql.ErrNoRows {
-// 			return nil, errors.New("no rows were found")
-// 		}
+// ------------------------------------
+// Func: Retrieve Client By ID
+// ------------------------------------
+func (cr *ClientRepository) QueryClientByID(id uuid.UUID) (*domain.Client, error) {
+	var client = new(domain.Client)
 
-// 		// Query profile
-// 		var profile = new(domain.Profile)
-// 		querystm3 := `SELECT id, street, number, postcode, community, email, birthday FROM profile WHERE id=$1`
-// 		row3 := cr.db.QueryRow(querystm3, id)
-// 		err = row3.Scan(&id2, &profile.Street, &profile.Number, &profile.Postcode, &profile.Community, &profile.Email, &profile.Birthday)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		if err == sql.ErrNoRows {
-// 			return nil, errors.New("no rows were found")
-// 		}
+	// Query the client
+	result := cr.db.Preload("Login").Preload("Profile").First(&client, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, ERROR_NO_CLIENT_FOUND
+	}
+	return client, nil
+}
 
-// 		// Create a client struct
-// 		client := domain.Client{
-// 			ID:      id,
-// 			Name:    name,
-// 			Login:   login,
-// 			Profile: profile,
-// 		}
-// 		// append the client to the array
-// 		clients = append(clients, &client)
-// 	}
+// ------------------------------------
+// Func: Delete Client
+// ------------------------------------
+func (cr *ClientRepository) DeleteClient(id uuid.UUID) error {
 
-// 	return clients, nil
-// }
+	// Delete client
+	result := cr.db.Delete(&Client{}, id)
+	if result.Error != nil {
+		log.Printf("error saving client: %v", err)
+		return err
+	}
+	if result.RowsAffected == 0 {
+		return ERROR_NO_CLIENT_FOUND
+	}
 
-// // ------------------------------------
-// // Func: Retrieve Client By ID
-// // ------------------------------------
-// func (cr *ClientRepository) QueryClientByID(id uuid.UUID) (*domain.Client, error) {
-// 	var client = new(domain.Client)
-// 	var id2 uuid.UUID
-
-// 	// Query the client
-// 	querystm := `SELECT id, name FROM client WHERE id=$1`
-// 	result := cr.db.QueryRow(querystm, id)
-// 	err := result.Scan(&client.ID, &client.Name)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	// Query login
-// 	var login = new(domain.Login)
-// 	querystm2 := `SELECT id, login, password FROM login WHERE id=$1;`
-// 	row2 := cr.db.QueryRow(querystm2, id)
-// 	err = row2.Scan(&id2, &login.Email, &login.Password)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	// Query profile
-// 	var profile = new(domain.Profile)
-// 	querystm3 := `SELECT id, street, number, postcode, community, email, birthday FROM profile WHERE id=$1`
-// 	row3 := cr.db.QueryRow(querystm3, id)
-// 	err = row3.Scan(&id2, &profile.Street, &profile.Number, &profile.Postcode, &profile.Community, &profile.Email, &profile.Birthday)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	// Create a client struct
-// 	client.Login = login
-// 	client.Profile = profile
-// 	return client, nil
-// }
-
-// // ------------------------------------
-// // Func: Delete Client
-// // ------------------------------------
-// func (cr *ClientRepository) DeleteClient(id uuid.UUID) error {
-
-// 	// Delete client
-// 	deleteStmt := `DELETE FROM client WHERE id = $1`
-// 	_, err := cr.db.Exec(deleteStmt, id)
-// 	if err != nil {
-// 		log.Printf("error saving client: %v", err)
-// 		return err
-// 	}
-
-// 	deleteStmt = `DELETE FROM login WHERE id = $1`
-// 	_, err = cr.db.Exec(deleteStmt, id)
-// 	if err != nil {
-// 		log.Printf("error saving client: %v", err)
-// 		return err
-// 	}
-
-// 	deleteStmt = `DELETE FROM profile WHERE id = $1`
-// 	_, err = cr.db.Exec(deleteStmt, id)
-// 	if err != nil {
-// 		log.Printf("error saving client: %v", err)
-// 		return err
-// 	}
-
-// 	return nil
-// }
+	return nil
+}

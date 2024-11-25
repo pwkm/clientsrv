@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // Data transfer object NewUser
@@ -52,69 +53,69 @@ func (h *ClientHandler) RegisterClient(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, id)
 }
 
-// // --------------------------------
-// // Function:  Get Client By ID
-// // --------------------------------
-// func (h *ClientHandler) GetClientByID(ctx *gin.Context) {
-// 	id := ctx.Param("id")
-// 	uid, err := uuid.Parse(id)
-// 	if err != nil {
-// 		ctx.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	// Call service
-// 	client, err := h.svc.GetClientByID(uid)
-// 	if err != nil {
-// 		ctx.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	// Reply status
-// 	ctx.JSON(http.StatusOK, client)
-// }
+// --------------------------------
+// Function:  Get Client By ID
+// --------------------------------
+func (h *ClientHandler) GetClientByID(ctx *gin.Context) {
+	id := ctx.Param("id")
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	// Call service
+	client, err := h.svc.GetClientByID(uid)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	// Reply status
+	ctx.JSON(http.StatusOK, client)
+}
 
-// // --------------------------------
-// // Function:  List Clients
-// // --------------------------------
-// func (h *ClientHandler) ListClients(ctx *gin.Context) {
-// 	// Call service
-// 	clients, err := h.svc.GetClients()
-// 	if err != nil {
-// 		ctx.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	// Reply status
-// 	ctx.JSON(http.StatusOK, clients)
-// }
+// --------------------------------
+// Function:  List Clients
+// --------------------------------
+func (h *ClientHandler) ListClients(ctx *gin.Context) {
+	// Call service
+	clients, err := h.svc.GetClients()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	// Reply status
+	ctx.JSON(http.StatusOK, clients)
+}
 
-// // --------------------------------
-// // Function:  Delete Client
-// // --------------------------------
-// func (h *ClientHandler) DeleteClient(ctx *gin.Context) {
-// 	id := ctx.Param("id")
-// 	uid, err := uuid.Parse(id)
-// 	if err != nil {
-// 		ctx.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	// call service
-// 	err = h.svc.DeleteClient(uid)
-// 	if err != nil {
-// 		ctx.JSON(http.StatusBadRequest, gin.H{
-// 			"error": err.Error(),
-// 		})
-// 		return
-// 	}
-// 	// Reply status
-// 	ctx.JSON(http.StatusOK, "client deleted ")
-// }
+// --------------------------------
+// Function:  Delete Client
+// --------------------------------
+func (h *ClientHandler) DeleteClient(ctx *gin.Context) {
+	id := ctx.Param("id")
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	// call service
+	err = h.svc.DeleteClient(uid)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	// Reply status
+	ctx.JSON(http.StatusOK, "client deleted ")
+}
 
 // // --------------------------------
 // // Function:  Update Client

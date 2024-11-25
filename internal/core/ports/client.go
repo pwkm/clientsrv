@@ -8,9 +8,9 @@ import (
 
 type IClientRepository interface {
 	SaveClient(client *domain.Client) error
-	// QueryClients() ([]*domain.Client, error)
-	// QueryClientByID(id uuid.UUID) (*domain.Client, error)
-	// DeleteClient(id uuid.UUID) error
+	QueryClients() ([]*domain.Client, error)
+	QueryClientByID(id uuid.UUID) (*domain.Client, error)
+	DeleteClient(id uuid.UUID) error
 }
 
 type IMessageStream interface {
@@ -19,7 +19,7 @@ type IMessageStream interface {
 
 type IClientService interface {
 	RegisterClient(name, email, password string) (uuid.UUID, error)
-	// GetClients() ([]*domain.Client, error)
-	// DeleteClient(id uuid.UUID) error
-	// GetClientByID(id uuid.UUID) (*domain.Client, error)
+	GetClients() ([]*domain.Client, error)
+	DeleteClient(id uuid.UUID) error
+	GetClientByID(id uuid.UUID) (*domain.Client, error)
 }

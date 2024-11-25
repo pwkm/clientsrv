@@ -33,19 +33,10 @@ func NewRouter(env *env.Env, clienthandler ClientHandler) (*Router, error) {
 	client := router.Group("/client")
 	{
 		client.POST("/new", clienthandler.RegisterClient)
-		// client.GET("/:id", clienthandler.GetClientByID)
-		// client.GET("/", clienthandler.ListClients)
-		// client.GET("/delete/:id", clienthandler.DeleteClient)
+		client.GET("/:id", clienthandler.GetClientByID)
+		client.GET("/", clienthandler.ListClients)
+		client.DELETE("/:id", clienthandler.DeleteClient)
 	}
-
-	// Product group
-	// product := router.Group("/product")
-	// {
-	// 	// product.POST("/new", producthandler.CreateProduct)
-	// 	// product.GET("/:id", clienthandler.GetClientByID)
-	// 	// product.GET("/", clienthandler.ListClients)
-	// 	// product.GET("/delete/:id", clienthandler.DeleteClient)
-	// }
 
 	return &Router{
 		router,
