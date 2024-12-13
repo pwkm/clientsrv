@@ -1,9 +1,8 @@
 package ports
 
 import (
-	"client/internal/core/domain"
-
 	"github.com/google/uuid"
+	"github.com/pwkm/clientsrv/internal/core/domain"
 )
 
 type IClientRepository interface {

@@ -1,13 +1,13 @@
 package http
 
 import (
-	"client/internal/adapters/infra/monitoring"
-	"client/internal/utils/env"
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pwkm/clientsrv/internal/adapters/infra/monitoring"
+	"github.com/pwkm/clientsrv/internal/utils/env"
 )
 
 // Router is a wrapper voor HTTP Router
@@ -22,6 +22,15 @@ func NewRouter(env *env.Env, clienthandler ClientHandler) (*Router, error) {
 	}
 
 	router := gin.Default()
+
+	// JWT Validator
+	// keyFunc := func(ctx context.Context) (interface{}, error) {
+	// 	return []byte("secret"), nil
+	// }
+
+	// jwtvalidator, _ := validator.New(keyFunc, validator.HS256, "http://localhost:8080/client", []string{"api:read"})
+	// jwtMiddleware := jwtmiddleware.New(jwtvalidator.ValidateToken)
+	// router.Use(adapter.Wrap(jwtMiddleware.CheckJWT))
 
 	// midleware prometheus
 	router.Use(monitoring.PrometheusMiddleware())

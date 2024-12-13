@@ -1,13 +1,13 @@
 package service
 
 import (
-	"client/internal/core/domain"
-	"client/internal/core/ports"
 	"errors"
 	"log"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/pwkm/clientsrv/internal/core/domain"
+	"github.com/pwkm/clientsrv/internal/core/ports"
 )
 
 // ------------------------------
@@ -22,14 +22,13 @@ var (
 // Client Service Structure
 // -----------------------------
 type ClientService struct {
-	Repo   ports.IClientRepository
-	Stream ports.IMessageStream
+	Repo ports.IClientRepository
+	// Stream ports.IMessageStream
 }
 
-func NewClientService(repo ports.IClientRepository, str ports.IMessageStream) *ClientService {
+func NewClientService(repo ports.IClientRepository) *ClientService {
 	return &ClientService{
-		Repo:   repo,
-		Stream: str,
+		Repo: repo,
 	}
 }
 
@@ -76,12 +75,12 @@ func (c *ClientService) RegisterClient(
 	}
 
 	// Stream client as a message
-	err = c.Stream.
-		SendMessage(client)
-	if err != nil {
-		log.Printf("client can not be streamed: %v", err)
-		return uuid.Nil, err_client_creation_error
-	}
+	// err = c.Stream.
+	// 	SendMessage(client)
+	// if err != nil {
+	// 	log.Printf("client can not be streamed: %v", err)
+	// 	return uuid.Nil, err_client_creation_error
+	// }
 
 	// Return the client ID
 	return client.ID, nil

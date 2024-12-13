@@ -1,13 +1,13 @@
 package rabbitmsg
 
 import (
-	"client/internal/core/domain"
-	"client/internal/utils/env"
 	"encoding/json"
 	"fmt"
 	"log"
 
 	"github.com/google/uuid"
+	"github.com/pwkm/clientsrv/internal/core/domain"
+	"github.com/pwkm/clientsrv/internal/utils/env"
 	"github.com/streadway/amqp"
 )
 

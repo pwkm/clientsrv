@@ -1,8 +1,8 @@
-http://localhost:8080/client/
+https://localhost:8080/client/
 Authorization: Basic admin secret
 
 ###
-POST http://localhost:8080/client/new HTTP/1.1
+POST https://localhost:8080/client/new HTTP/1.1
 content-type: application/json
 
 {

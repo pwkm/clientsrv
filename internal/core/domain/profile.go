@@ -1,11 +1,11 @@
 package domain
 
 import (
-	"client/internal/utils"
 	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/pwkm/clientsrv/internal/utils"
 )
 
 var (

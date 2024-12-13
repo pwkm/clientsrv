@@ -1,11 +1,11 @@
 package http
 
 import (
-	"client/internal/core/ports"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/pwkm/clientsrv/internal/core/ports"
 )
 
 // Data transfer object NewUser

@@ -1,11 +1,11 @@
 package posgresdb
 
 import (
-	"client/internal/utils/env"
 	"errors"
 	"fmt"
 	"log"
 
+	"github.com/pwkm/clientsrv/internal/utils/env"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"client/internal/core/domain"
 	"errors"
 	"log"
 
 	"github.com/google/uuid"
+	"github.com/pwkm/clientsrv/internal/core/domain"
 	"gorm.io/gorm"
 )
 
@@ -30,6 +30,7 @@ func NewClientRepository(db *gorm.DB) *ClientRepository {
 // Function: Save Client
 // ------------------------------------
 func (cr *ClientRepository) SaveClient(client *domain.Client) error {
+
 	// begin a transaction
 	tx := cr.db.Begin()
 	defer func() {
@@ -87,12 +88,14 @@ func (cr *ClientRepository) QueryClientByID(id uuid.UUID) (*domain.Client, error
 // Func: Delete Client
 // ------------------------------------
 func (cr *ClientRepository) DeleteClient(id uuid.UUID) error {
+	var client = new(domain.Client)
 
 	// Delete client
-	result := cr.db.Delete(&Client{}, id)
+	result := cr.db.First(&client, id)
+	result = cr.db.Delete(&client)
 	if result.Error != nil {
-		log.Printf("error saving client: %v", err)
-		return err
+		log.Printf("error saving client: %v", result.Error)
+		return result.Error
 	}
 	if result.RowsAffected == 0 {
 		return ERROR_NO_CLIENT_FOUND

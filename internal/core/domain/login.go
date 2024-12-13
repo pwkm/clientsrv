@@ -1,10 +1,10 @@
 package domain
 
 import (
-	"client/internal/utils"
 	"errors"
 
 	"github.com/google/uuid"
+	"github.com/pwkm/clientsrv/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
