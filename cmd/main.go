@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/pwkm/clientsrv/internal/adapters/handler/http"
@@ -17,6 +18,13 @@ import (
 func main() {
 	// Read Config file into environement container env
 	env := env.NewEnv()
+
+	// Determine port for HTTP service.
+	env.ServerPort = os.Getenv("PORT")
+	if env.ServerPort == "" {
+		env.ServerPort = "8080"
+		log.Printf("defaulting to port %s", env.ServerPort)
+	}
 
 	// Setup a database
 	db := posgresdb.Database(env)
